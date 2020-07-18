@@ -17,10 +17,10 @@ app.use(express.json());
 var Tables = [
     {
 
-        name: "Yoda",
+        customerName: "Yoda",
         phoneNumber: "7604445555",
-        email: "yoda@force.com",
-        uniqueId: 2000
+        customerEmail: "yoda@force.com",
+        customerID: 2000
     },
 
 ];
@@ -38,35 +38,44 @@ app.get("/", function (req, res) {
 app.get("/reserve", function (req, res) {
     res.sendFile(path.join(__dirname, "reserve.html"));
 });
+app.get("/tables", function (req, res) {
+    res.sendFile(path.join(__dirname, "tables.html"));
+});
 
 // Displays all characters
 app.get("/api/tables", function (req, res) {
-    return res.json(Tables);
+    return res.json(Tables.slice(0, 5));
+});
+app.get("/api/waitlist", function (req, res) {
+    if (Tables.length < 5) {
+        return res.json("");
+    }
+    else {
+        return res.json(Tables.slice(5, 15))
+    }
 });
 
 // Displays a single character, or returns false
-app.get("/api/tables/", function (req, res) {
 
-
-
-    return res.json(Tables);
-});
 
 // Create New Characters - takes in JSON input
-app.post("/api/characters", function (req, res) {
+app.post("/api/tables", function (req, res) {
     // req.body hosts is equal to the JSON post sent from the user
     // This works because of our body parsing middleware
-    var newCharacter = req.body;
+    console.log(req.body)
+
+    var newTable = req.body;
+
 
     // Using a RegEx Pattern to remove spaces from newCharacter
     // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-    newCharacter.routeName = newCharacter.name.replace(/\s+/g, "").toLowerCase();
 
-    console.log(newCharacter);
+    console.log(newTable);
 
-    characters.push(newCharacter);
+    Tables.push(newTable);
+    console.log(Tables)
 
-    res.json(newCharacter);
+    // res.json(newTable);
 });
 
 // Starts the server to begin listening
