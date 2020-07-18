@@ -42,7 +42,7 @@ app.get("/tables", function (req, res) {
     res.sendFile(path.join(__dirname, "tables.html"));
 });
 
-// Displays all characters
+
 app.get("/api/tables", function (req, res) {
     return res.json(Tables.slice(0, 5));
 });
@@ -62,20 +62,39 @@ app.get("/api/waitlist", function (req, res) {
 app.post("/api/tables", function (req, res) {
     // req.body hosts is equal to the JSON post sent from the user
     // This works because of our body parsing middleware
-    console.log(req.body)
+    // console.log(req.body)
+    if (Tables.length < 5) {
+        var newTable = req.body;
 
-    var newTable = req.body;
+
+        // Using a RegEx Pattern to remove spaces from newCharacter
+        // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
 
 
-    // Using a RegEx Pattern to remove spaces from newCharacter
-    // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
 
-    console.log(newTable);
+        Tables.push(newTable);
 
-    Tables.push(newTable);
-    console.log(Tables)
 
-    // res.json(newTable);
+
+        return res.json(true);
+
+    } else {
+        var newTable = req.body;
+
+
+        // Using a RegEx Pattern to remove spaces from newCharacter
+        // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
+
+        console.log(newTable);
+
+        Tables.push(newTable);
+        console.log(Tables)
+
+
+        return res.json(false);
+    }
+
+
 });
 
 // Starts the server to begin listening
